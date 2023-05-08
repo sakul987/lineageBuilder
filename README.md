@@ -2,6 +2,10 @@ This is supposed to be a script for my specific use case to build Lineage OS for
 
 It's designed to run inside an Ubuntu 22.04 LXC Container which only serves this one purpose and expects you to provide the proprietray blobs at ~/blobs/ needed to build.
 
+For me it looks like this:
+
+`~/blobs/vendor/samsung/universal7880-common/`
+
 The branch is specified with LOS_B=lineage-18.1 e.g.
 
 Device with LOS_D=a5y17lte e.g.
