@@ -110,4 +110,5 @@ mv signed-ota_update.zip $HOME/signed-ota_update.zip
 rm -f signed-target_files.zip
 
 #clean out dir
+mka clean
 mka clobber
