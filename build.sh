@@ -6,6 +6,7 @@ cd
 #export LOS_B=lineage-18.1
 #export LOS_D=a5y17lte
 #export PATCHFILE="android_frameworks_base-R.patch"
+#export LOS_V=samsung
 
 if [[ -z "$LOS_BUILD_UTILS_INSTALLED" ]]; then
     #install needed packages
@@ -66,6 +67,10 @@ cd frameworks/base
 sed 's/android:protectionLevel="dangerous"/android:protectionLevel="signature|privileged"/' "$HOME/patch/$PATCHFILE" | patch --quiet --force -p1
 
 croot
+
+# apply base patch
+mkdir -p "vendor/$LOS_V/overlay/microg/frameworks/base/core/res/res/values/"
+cp $HOME/patch/frameworks_base_config.xml "vendor/$LOS_V/overlay/microg/frameworks/base/core/res/res/values/config.xml"
 
 
 # include apps of lineageos4microg
