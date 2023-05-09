@@ -50,19 +50,16 @@ fi
 
 cd ~/android/lineage
 
-#get setup script funcs
-source build/envsetup.sh
-
 #repo checkout#####?
 
 # sync src, might take a while
 repo sync
 
+#get setup script funcs
+source build/envsetup.sh
+
 # copy proprietary blobs into correct dir
 cp -r ~/blobs/vendor/* vendor/
-
-# get device specific code
-breakfast $LOS_D
 
 if [[ -z "$LOS_KEYS_EXIST" ]]; then
     # create sign keys if the dont exist (no password)
@@ -76,10 +73,14 @@ if [[ -z "$LOS_KEYS_EXIST" ]]; then
     source ~/.bashrc
 fi
 
+croot
+
+# get device specific code
+breakfast $LOS_D
+
 # build packages
 mka target-files-package otatools
 
-croot
 
 # sign packages
 sign_target_files_apks -o -d ~/.android-certs $OUT/obj/PACKAGING/target_files_intermediates/*-target_files-*.zip signed-target_files.zip
@@ -87,4 +88,9 @@ sign_target_files_apks -o -d ~/.android-certs $OUT/obj/PACKAGING/target_files_in
 # create installer
 ota_from_target_files -k ~/.android-certs/releasekey --block --backup=true signed-target_files.zip signed-ota_update.zip
 
-#make clean#?
+# move out installer into home
+mv signed-ota_update.zip $HOME/signed-ota_update.zip
+rm -f signed-target_files.zip
+
+#clean out dir
+mka clobber
