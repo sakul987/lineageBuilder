@@ -61,6 +61,23 @@ source build/envsetup.sh
 # copy proprietary blobs into correct dir
 cp -r ~/blobs/vendor/* vendor/
 
+# apply microG signature spoofing patch # put your needed patch into $HOME/patch and specify with PATCHFILE
+cd frameworks/base
+sed 's/android:protectionLevel="dangerous"/android:protectionLevel="signature|privileged"/' "$HOME/patch/$PATCHFILE" | patch --quiet --force -p1
+
+croot
+
+
+# include apps of lineageos4microg
+export WITH_GMS=true # dont know if needed
+rm -rf .repo/local_manifests/manifest.xml
+touch .repo/local_manifests/manifest.xml
+echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" >> .repo/local_manifests/manifest.xml
+echo "<manifest>" >> .repo/local_manifests/manifest.xml
+echo "    <project path=\"vendor/partner_gms\" name=\"lineageos4microg/android_vendor_partner_gms\" remote=\"github\" revision=\"master\" />" >> .repo/local_manifests/manifest.xml
+echo "</manifest>" >> .repo/local_manifests/manifest.xml
+
+
 if [[ -z "$LOS_KEYS_EXIST" ]]; then
     # create sign keys if the dont exist (no password)
     subject='/C=US/ST=California/L=Mountain View/O=Android/OU=Android/CN=Android/emailAddress=android@android.com'
