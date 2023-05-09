@@ -4,6 +4,7 @@ source ~/.bashrc
 cd
 #export LOS_B=lineage-18.1
 #export LOS_D=a5y17lte
+#export PATCHFILE="android_frameworks_base-R.patch"
 
 if [[ -z "$LOS_UTILS_INSTALLED" ]]; then
     # make dirs for repo tool & source
