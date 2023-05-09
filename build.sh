@@ -1,4 +1,3 @@
-set -e
 unset LOS_REPO_INITIALIZED
 unset LOS_UTILS_INSTALLED
 source ~/.bashrc
