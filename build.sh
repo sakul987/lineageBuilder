@@ -1,10 +1,19 @@
 unset LOS_REPO_INITIALIZED
 unset LOS_UTILS_INSTALLED
+unset LOS_BUILD_UTILS_INSTALLED
 source ~/.bashrc
 cd
 #export LOS_B=lineage-18.1
 #export LOS_D=a5y17lte
 #export PATCHFILE="android_frameworks_base-R.patch"
+
+if [[ -z "$LOS_BUILD_UTILS_INSTALLED" ]]; then
+    #install needed packages
+    sudo apt install bc bison build-essential ccache curl flex g++-multilib gcc-multilib git git-lfs gnupg gperf imagemagick lib32ncurses5-dev lib32readline-dev lib32z1-dev libelf-dev liblz4-tool libncurses5 libncurses5-dev libsdl1.2-dev libssl-dev libxml2 libxml2-utils lzop pngcrush rsync schedtool squashfs-tools xsltproc zip zlib1g-dev python-is-python3
+
+    echo "export LOS_BUILD_UTILS_INSTALLED=true" >> $HOME/.bashrc
+    source $HOME/.bashrc
+fi
 
 if [[ -z "$LOS_UTILS_INSTALLED" ]]; then
     # make dirs for repo tool & source
