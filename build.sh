@@ -1,7 +1,7 @@
 unset LOS_REPO_INITIALIZED
 unset LOS_UTILS_INSTALLED
 unset LOS_BUILD_UTILS_INSTALLED
-source ~/.bashrc
+source $HOME/.bashrc
 cd
 #export LOS_B=lineage-18.1
 #export LOS_D=a5y17lte
@@ -17,21 +17,21 @@ fi
 
 if [[ -z "$LOS_UTILS_INSTALLED" ]]; then
     # make dirs for repo tool & source
-    mkdir -p ~/bin
-    mkdir -p ~/android/lineage
+    mkdir -p $HOME/bin
+    mkdir -p $HOME/android/lineage
 
     # get repo tool
-    curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
-    chmod a+x ~/bin/repo
-    echo "export PATH=$PATH:/home/$USER/bin" >> ~/.bashrc
+    curl https://storage.googleapis.com/git-repo-downloads/repo > $HOME/bin/repo
+    chmod a+x $HOME/bin/repo
+    echo "export PATH=$PATH:/home/$USER/bin" >> $HOME/.bashrc
 
     # enable ccache with 50GB
-    echo "export USE_CCACHE=1" >> ~/.bashrc
-    echo "export CCACHE_EXEC=/usr/bin/ccache" >> ~/.bashrc
+    echo "export USE_CCACHE=1" >> $HOME/.bashrc
+    echo "export CCACHE_EXEC=/usr/bin/ccache" >> $HOME/.bashrc
     ccache -M 50G
 
-    echo "export LOS_UTILS_INSTALLED=true" >> ~/.bashrc
-    source ~/.bashrc
+    echo "export LOS_UTILS_INSTALLED=true" >> $HOME/.bashrc
+    source $HOME/.bashrc
 fi
 
 if [[ -z "$LOS_REPO_INITIALIZED" ]]; then
@@ -40,15 +40,15 @@ if [[ -z "$LOS_REPO_INITIALIZED" ]]; then
     git config --global user.name "Your Name"
 
     # initialize source repo
-    cd ~/android/lineage
+    cd $HOME/android/lineage
     # (press enter for default when asked if you want some color stuff)
     echo -ne '\n' | repo init -u https://github.com/LineageOS/android.git -b $LOS_B --git-lfs
 
-    echo "export LOS_REPO_INITIALIZED=true" >> ~/.bashrc
-    source ~/.bashrc
+    echo "export LOS_REPO_INITIALIZED=true" >> $HOME/.bashrc
+    source $HOME/.bashrc
 fi
 
-cd ~/android/lineage
+cd $HOME/android/lineage
 
 #repo checkout#####?
 
@@ -59,7 +59,7 @@ repo sync
 source build/envsetup.sh
 
 # copy proprietary blobs into correct dir
-cp -r ~/blobs/vendor/* vendor/
+cp -r $HOME/blobs/vendor/* vendor/
 
 # apply microG signature spoofing patch # put your needed patch into $HOME/patch and specify with PATCHFILE
 cd frameworks/base
@@ -81,13 +81,13 @@ echo "</manifest>" >> .repo/local_manifests/manifest.xml
 if [[ -z "$LOS_KEYS_EXIST" ]]; then
     # create sign keys if the dont exist (no password)
     subject='/C=US/ST=California/L=Mountain View/O=Android/OU=Android/CN=Android/emailAddress=android@android.com'
-    mkdir ~/.android-certs
+    mkdir $HOME/.android-certs
     for cert in bluetooth cyngn-app media networkstack platform releasekey sdk_sandbox shared testcert testkey verity; do \
-        echo -ne '\n' | ./development/tools/make_key ~/.android-certs/$cert "$subject"; \
+        echo -ne '\n' | ./development/tools/make_key $HOME/.android-certs/$cert "$subject"; \
     done
 
-    echo "export LOS_KEYS_EXIST=true" >> ~/.bashrc
-    source ~/.bashrc
+    echo "export LOS_KEYS_EXIST=true" >> $HOME/.bashrc
+    source $HOME/.bashrc
 fi
 
 croot
@@ -100,10 +100,10 @@ mka target-files-package otatools
 
 
 # sign packages
-sign_target_files_apks -o -d ~/.android-certs $OUT/obj/PACKAGING/target_files_intermediates/*-target_files-*.zip signed-target_files.zip
+sign_target_files_apks -o -d $HOME/.android-certs $OUT/obj/PACKAGING/target_files_intermediates/*-target_files-*.zip signed-target_files.zip
 
 # create installer
-ota_from_target_files -k ~/.android-certs/releasekey --block --backup=true signed-target_files.zip signed-ota_update.zip
+ota_from_target_files -k $HOME/.android-certs/releasekey --block --backup=true signed-target_files.zip signed-ota_update.zip
 
 # move out installer into home
 mv signed-ota_update.zip $HOME/signed-ota_update.zip
